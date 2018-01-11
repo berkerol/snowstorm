@@ -23,13 +23,13 @@ let flake = {
 
 let flakes = [];
 
-ctx.strokeStyle = flake.color;
-ctx.lineCap = flake.lineCap;
 draw();
 window.addEventListener('resize', resizeHandler);
 
 function draw () {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = flake.color;
+  ctx.lineCap = flake.lineCap;
   for (let f of flakes) {
     drawFlake(f);
   }
