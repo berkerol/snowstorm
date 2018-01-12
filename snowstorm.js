@@ -8,13 +8,15 @@ let flake = {
   lines: 4,
   lineCap: 'round',
   highestDepth: 0.05,
-  highestLength: 8,
+  highestLength: 6,
   highestLineWidth: 2.5,
+  highestRotation: 2,
   highestSpeedX: 1,
   highestSpeedY: 4,
   lowestDepth: -0.05,
   lowestLength: 4,
   lowestLineWidth: 1.5,
+  lowestRotation: 1,
   lowestSpeedX: -1,
   lowestSpeedY: 2,
   probability: 0.2,
@@ -42,6 +44,7 @@ function drawFlake (f) {
   ctx.lineWidth = f.lineWidth;
   ctx.save();
   ctx.translate(f.x, f.y);
+  ctx.rotate(f.angle * Math.PI / 180);
   for (let i = 0; i < flake.lines * 2; i++) {
     ctx.beginPath();
     ctx.moveTo(0, 0);
@@ -79,9 +82,11 @@ function createFlakes () {
     flakes.push({
       x,
       y,
+      angle: 0,
       depth: flake.lowestDepth + Math.random() * (flake.highestDepth - flake.lowestDepth),
       length,
       lineWidth: flake.lowestLineWidth + Math.random() * (flake.highestLineWidth - flake.lowestLineWidth),
+      rotation: flake.lowestRotation + Math.random() * (flake.highestRotation - flake.lowestRotation),
       speedX,
       speedY: flake.lowestSpeedY + Math.random() * (flake.highestSpeedY - flake.lowestSpeedY)
     });
@@ -97,6 +102,7 @@ function removeFlakes () {
       f.x += f.speedX;
       f.y += f.speedY;
       f.length += f.depth;
+      f.angle += f.rotation;
     }
   }
 }
