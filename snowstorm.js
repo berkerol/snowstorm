@@ -5,7 +5,7 @@ canvas.height = window.innerHeight;
 
 let flake = {
   color: '#FFFFFF',
-  lines: 4,
+  lines: 8,
   lineCap: 'round',
   highestDepth: 0.05,
   highestLength: 6,
@@ -45,13 +45,13 @@ function drawFlake (f) {
   ctx.save();
   ctx.translate(f.x, f.y);
   ctx.rotate(f.angle * Math.PI / 180);
-  for (let i = 0; i < flake.lines * 2; i++) {
+  for (let i = 0; i < flake.lines; i++) {
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.lineTo(f.length, 0);
     ctx.stroke();
     ctx.closePath();
-    ctx.rotate(Math.PI / flake.lines);
+    ctx.rotate(2 * Math.PI / flake.lines);
   }
   ctx.restore();
 }
