@@ -94,7 +94,7 @@ function createFlakes () {
 }
 
 function removeFlakes () {
-  for (let i = 0; i < flakes.length; i++) {
+  for (let i = flakes.length - 1; i >= 0; i--) {
     let f = flakes[i];
     if (f.length < 0 || f.x + f.length < 0 || f.x - f.length > canvas.width || f.y - f.length > canvas.height) {
       flakes.splice(i, 1);
