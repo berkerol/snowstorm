@@ -4,7 +4,7 @@
 [![semistandard](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg)](https://github.com/Flet/semistandard)
 [![license](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](https://github.com/berkerol/snowstorm/blob/master/LICENSE)
 
-A beautiful snowstorm animation. 3D effect with growing/shrinking snow flakes. Written in [ES6](https://www.ecma-international.org/ecma-262/6.0/).
+Watch a crazy snowstorm in the comfort of your browser. 3D effect with growing/shrinking snow flakes. Written in [ES6](https://www.ecma-international.org/ecma-262/6.0/).
 
 [![button](watch.png)](https://berkerol.github.io/snowstorm/snowstorm.html)
 
