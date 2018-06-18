@@ -5,7 +5,7 @@ canvas.height = window.innerHeight;
 
 let flake = {
   color: '#FFFFFF',
-  lines: 8,
+  lines: 6,
   lineCap: 'round',
   highestDepth: 0.05,
   highestLength: 6,
@@ -29,9 +29,9 @@ draw();
 window.addEventListener('resize', resizeHandler);
 
 function draw () {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = flake.color;
   ctx.lineCap = flake.lineCap;
+  ctx.strokeStyle = flake.color;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   for (let f of flakes) {
     drawFlake(f);
   }
@@ -42,18 +42,16 @@ function draw () {
 
 function drawFlake (f) {
   ctx.lineWidth = f.lineWidth;
-  ctx.save();
-  ctx.translate(f.x, f.y);
-  ctx.rotate(f.angle * Math.PI / 180);
-  for (let i = 0; i < flake.lines; i++) {
+  for (let i = 0; i < flake.lines / 2; i++) {
+    let angle = f.angle * Math.PI / 180 + i * 2 * Math.PI / flake.lines;
+    let x = f.length * Math.cos(angle);
+    let y = f.length * Math.sin(angle);
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(f.length, 0);
+    ctx.moveTo(f.x - x, f.y - y);
+    ctx.lineTo(f.x + x, f.y + y);
     ctx.stroke();
     ctx.closePath();
-    ctx.rotate(2 * Math.PI / flake.lines);
   }
-  ctx.restore();
 }
 
 function createFlakes () {
