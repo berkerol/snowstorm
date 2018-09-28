@@ -1,7 +1,13 @@
+/* global performance */
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+
+const getTime = typeof performance === 'function' ? performance.now : Date.now;
+const FRAME_DURATION = 1000 / 58;
+let then = getTime();
+let acc = 0;
 
 let flake = {
   color: '#FFFFFF',
@@ -29,6 +35,19 @@ draw();
 window.addEventListener('resize', resizeHandler);
 
 function draw () {
+  let now = getTime();
+  let ms = now - then;
+  let frames = 0;
+  then = now;
+  if (ms < 1000) {
+    acc += ms;
+    while (acc >= FRAME_DURATION) {
+      frames++;
+      acc -= FRAME_DURATION;
+    }
+  } else {
+    ms = 0;
+  }
   ctx.lineCap = flake.lineCap;
   ctx.strokeStyle = flake.color;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -36,7 +55,7 @@ function draw () {
     drawFlake(f);
   }
   createFlakes();
-  removeFlakes();
+  removeFlakes(frames);
   window.requestAnimationFrame(draw);
 }
 
@@ -91,16 +110,16 @@ function createFlakes () {
   }
 }
 
-function removeFlakes () {
+function removeFlakes (frames) {
   for (let i = flakes.length - 1; i >= 0; i--) {
     let f = flakes[i];
     if (f.length < 0 || f.x + f.length < 0 || f.x - f.length > canvas.width || f.y - f.length > canvas.height) {
       flakes.splice(i, 1);
     } else {
-      f.x += f.speedX;
-      f.y += f.speedY;
-      f.length += f.depth;
-      f.angle += f.rotation;
+      f.x += f.speedX * frames;
+      f.y += f.speedY * frames;
+      f.length += f.depth * frames;
+      f.angle += f.rotation * frames;
     }
   }
 }
