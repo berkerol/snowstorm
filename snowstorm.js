@@ -92,14 +92,10 @@ function createFlakes () {
     if (Math.random() < flake.sideProbability) {
       if (Math.random() < 0.5) {
         x = -length;
-        if (speedX < 0) {
-          speedX = -speedX;
-        }
+        speedX = Math.abs(speedX);
       } else {
         x = canvas.width + length;
-        if (speedX > 0) {
-          speedX = -speedX;
-        }
+        speedX = -Math.abs(speedX);
       }
       y = Math.random() * canvas.height;
     } else {
