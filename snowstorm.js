@@ -1,7 +1,7 @@
 /* global performance */
 /* global FPSMeter */
-let canvas = document.getElementById('canvas');
-let ctx = canvas.getContext('2d');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
@@ -9,7 +9,7 @@ const getTime = typeof performance === 'function' ? performance.now : Date.now;
 const FRAME_DURATION = 1000 / 58;
 let then = getTime();
 let acc = 0;
-let meter = new FPSMeter({
+const meter = new FPSMeter({
   left: canvas.width - 130 + 'px',
   top: 'auto',
   bottom: '12px',
@@ -18,7 +18,7 @@ let meter = new FPSMeter({
   graph: 1
 });
 
-let flake = {
+const flake = {
   color: '#FFFFFF',
   lines: 6,
   lineCap: 'round',
@@ -38,13 +38,13 @@ let flake = {
   sideProbability: 0.1
 };
 
-let flakes = [];
+const flakes = [];
 
 draw();
 window.addEventListener('resize', resizeHandler);
 
 function draw () {
-  let now = getTime();
+  const now = getTime();
   let ms = now - then;
   let frames = 0;
   then = now;
@@ -61,7 +61,7 @@ function draw () {
   ctx.lineCap = flake.lineCap;
   ctx.strokeStyle = flake.color;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let f of flakes) {
+  for (const f of flakes) {
     drawFlake(f);
   }
   createFlakes();
@@ -72,9 +72,9 @@ function draw () {
 function drawFlake (f) {
   ctx.lineWidth = f.lineWidth;
   for (let i = 0; i < flake.lines / 2; i++) {
-    let angle = f.angle * Math.PI / 180 + i * 2 * Math.PI / flake.lines;
-    let x = f.length * Math.cos(angle);
-    let y = f.length * Math.sin(angle);
+    const angle = f.angle * Math.PI / 180 + i * 2 * Math.PI / flake.lines;
+    const x = f.length * Math.cos(angle);
+    const y = f.length * Math.sin(angle);
     ctx.beginPath();
     ctx.moveTo(f.x - x, f.y - y);
     ctx.lineTo(f.x + x, f.y + y);
@@ -85,7 +85,7 @@ function drawFlake (f) {
 
 function createFlakes () {
   if (Math.random() < flake.probability) {
-    let length = flake.lowestLength + Math.random() * (flake.highestLength - flake.lowestLength);
+    const length = flake.lowestLength + Math.random() * (flake.highestLength - flake.lowestLength);
     let speedX = flake.lowestSpeedX + Math.random() * (flake.highestSpeedX - flake.lowestSpeedX);
     let x;
     let y;
@@ -122,7 +122,7 @@ function createFlakes () {
 
 function removeFlakes (frames) {
   for (let i = flakes.length - 1; i >= 0; i--) {
-    let f = flakes[i];
+    const f = flakes[i];
     if (f.length < 0 || f.x + f.length < 0 || f.x - f.length > canvas.width || f.y - f.length > canvas.height) {
       flakes.splice(i, 1);
     } else {
