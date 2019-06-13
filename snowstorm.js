@@ -18,15 +18,18 @@ const meter = new FPSMeter({
 });
 
 const flake = {
-  color: '#FFFFFF',
+  colors: [[255, 255, 255], [245, 245, 245], [235, 235, 235]],
+  shadowBlur: 20,
   lines: 6,
   lineCap: 'round',
+  highestAlpha: 1.0,
   highestDepth: 0.05,
   highestLength: 6,
   highestLineWidth: 2.5,
   highestRotation: 2,
   highestSpeedX: 1,
   highestSpeedY: 4,
+  lowestAlpha: 0.6,
   lowestDepth: -0.05,
   lowestLength: 4,
   lowestLineWidth: 1.5,
@@ -57,9 +60,9 @@ function draw () {
     ms = 0;
   }
   meter.tick();
-  ctx.lineCap = flake.lineCap;
-  ctx.strokeStyle = flake.color;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.lineCap = flake.lineCap;
+  ctx.shadowBlur = flake.shadowBlur;
   for (const f of flakes) {
     drawFlake(f);
   }
@@ -70,21 +73,24 @@ function draw () {
 
 function drawFlake (f) {
   ctx.lineWidth = f.lineWidth;
+  ctx.shadowColor = f.color;
+  ctx.strokeStyle = f.color;
+  ctx.beginPath();
   for (let i = 0; i < flake.lines / 2; i++) {
     const angle = f.angle * Math.PI / 180 + i * 2 * Math.PI / flake.lines;
     const x = f.length * Math.cos(angle);
     const y = f.length * Math.sin(angle);
-    ctx.beginPath();
     ctx.moveTo(f.x - x, f.y - y);
     ctx.lineTo(f.x + x, f.y + y);
-    ctx.stroke();
-    ctx.closePath();
   }
+  ctx.stroke();
 }
 
 function createFlakes () {
   if (Math.random() < flake.probability) {
     const length = flake.lowestLength + Math.random() * (flake.highestLength - flake.lowestLength);
+    const color = flake.colors[Math.floor(Math.random() * flake.colors.length)];
+    const alpha = flake.lowestAlpha + Math.random() * (flake.highestAlpha - flake.lowestAlpha);
     let speedX = flake.lowestSpeedX + Math.random() * (flake.highestSpeedX - flake.lowestSpeedX);
     let x;
     let y;
@@ -107,6 +113,7 @@ function createFlakes () {
       angle: 0,
       depth: flake.lowestDepth + Math.random() * (flake.highestDepth - flake.lowestDepth),
       length,
+      color: `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${alpha})`,
       lineWidth: flake.lowestLineWidth + Math.random() * (flake.highestLineWidth - flake.lowestLineWidth),
       rotation: flake.lowestRotation + Math.random() * (flake.highestRotation - flake.lowestRotation),
       speedX,
