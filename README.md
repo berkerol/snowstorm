@@ -5,7 +5,7 @@
 [![ECMAScript](https://img.shields.io/badge/ECMAScript-latest-brightgreen.svg)](https://www.ecma-international.org/ecma-262)
 [![license](https://img.shields.io/badge/license-GNU%20GPL%20v3.0-blue.svg)](https://github.com/berkerol/snowstorm/blob/master/LICENSE)
 
-Watch a crazy snowstorm in the comfort of your browser. 3D effect with growing/shrinking snow flakes.
+Watch a crazy snowstorm in the comfort of your browser. 3D effect with growing/shrinking snow flakes. Pause by pressing _P_.
 
 [![button](watch.png)](https://berkerol.github.io/snowstorm/snowstorm.html)
 

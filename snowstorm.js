@@ -8,6 +8,7 @@ const getTime = typeof performance === 'function' ? performance.now : Date.now;
 const FRAME_DURATION = 1000 / 58;
 let then = getTime();
 let acc = 0;
+let animation;
 const meter = new FPSMeter({
   left: canvas.width - 130 + 'px',
   top: 'auto',
@@ -43,6 +44,7 @@ const flake = {
 const flakes = [];
 
 draw();
+document.addEventListener('keyup', keyUpHandler);
 window.addEventListener('resize', resizeHandler);
 
 function draw () {
@@ -68,7 +70,7 @@ function draw () {
   }
   createFlakes();
   removeFlakes(frames);
-  window.requestAnimationFrame(draw);
+  animation = window.requestAnimationFrame(draw);
 }
 
 function drawFlake (f) {
@@ -132,6 +134,17 @@ function removeFlakes (frames) {
       f.y += f.speedY * frames;
       f.length += f.depth * frames;
       f.angle += f.rotation * frames;
+    }
+  }
+}
+
+function keyUpHandler (e) {
+  if (e.keyCode === 80) {
+    if (animation === undefined) {
+      animation = window.requestAnimationFrame(draw);
+    } else {
+      window.cancelAnimationFrame(animation);
+      animation = undefined;
     }
   }
 }
