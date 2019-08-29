@@ -59,8 +59,6 @@ function draw () {
       frames++;
       acc -= FRAME_DURATION;
     }
-  } else {
-    ms = 0;
   }
   meter.tick();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -128,7 +126,7 @@ function createFlakes () {
 function removeFlakes (frames) {
   for (let i = flakes.length - 1; i >= 0; i--) {
     const f = flakes[i];
-    if (f.length < 0 || f.x + f.length < 0 || f.x - f.length > canvas.width || f.y - f.length > canvas.height) {
+    if (f.x + f.length < 0 || f.x - f.length > canvas.width || f.y - f.length > canvas.height) {
       flakes.splice(i, 1);
     } else {
       f.x += f.speedX * frames;
