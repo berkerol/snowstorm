@@ -35,7 +35,7 @@ const flake = {
   lowestDepth: -0.05,
   lowestLength: 4,
   lowestLineWidth: 1.5,
-  lowestRotation: 1,
+  lowestRotation: -2,
   lowestSpeedX: -1,
   lowestSpeedY: 2,
   probability: 0.2,
