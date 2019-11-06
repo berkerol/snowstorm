@@ -1,24 +1,4 @@
-/* global performance FPSMeter */
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const getTime = typeof performance === 'function' ? performance.now : Date.now;
-const FRAME_THRESHOLD = 300;
-const FRAME_DURATION = 1000 / 58;
-let then = getTime();
-let acc = 0;
-let animation;
-const meter = new FPSMeter({
-  left: canvas.width - 130 + 'px',
-  top: 'auto',
-  bottom: '12px',
-  theme: 'colorful',
-  heat: 1,
-  graph: 1
-});
-
+/* global canvas ctx addPause addResize loop drawLine generateRandomNumber generateRandomInteger */
 const flake = {
   colors: [[255, 255, 255], [245, 245, 245], [235, 235, 235]],
   shadowBlur: 20,
@@ -44,24 +24,10 @@ const flake = {
 
 const flakes = [];
 
-draw();
-document.addEventListener('keyup', keyUpHandler);
-window.addEventListener('resize', resizeHandler);
+addPause();
+addResize();
 
-function draw () {
-  const now = getTime();
-  let ms = now - then;
-  let frames = 0;
-  then = now;
-  if (ms < FRAME_THRESHOLD) {
-    acc += ms;
-    while (acc >= FRAME_DURATION) {
-      frames++;
-      acc -= FRAME_DURATION;
-    }
-  }
-  meter.tick();
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+loop(function (frames) {
   ctx.lineCap = flake.lineCap;
   ctx.shadowBlur = flake.shadowBlur;
   for (const f of flakes) {
@@ -69,8 +35,7 @@ function draw () {
   }
   createFlakes();
   removeFlakes(frames);
-  animation = window.requestAnimationFrame(draw);
-}
+});
 
 function drawFlake (f) {
   ctx.lineWidth = f.lineWidth;
@@ -81,18 +46,17 @@ function drawFlake (f) {
     const angle = f.angle * Math.PI / 180 + i * 2 * Math.PI / flake.lines;
     const x = f.length * Math.cos(angle);
     const y = f.length * Math.sin(angle);
-    ctx.moveTo(f.x - x, f.y - y);
-    ctx.lineTo(f.x + x, f.y + y);
+    drawLine(f.x - x, f.y - y, f.x + x, f.y + y);
   }
   ctx.stroke();
 }
 
 function createFlakes () {
   if (Math.random() < flake.probability) {
-    const length = flake.lowestLength + Math.random() * (flake.highestLength - flake.lowestLength);
-    const color = flake.colors[Math.floor(Math.random() * flake.colors.length)];
-    const alpha = flake.lowestAlpha + Math.random() * (flake.highestAlpha - flake.lowestAlpha);
-    let speedX = flake.lowestSpeedX + Math.random() * (flake.highestSpeedX - flake.lowestSpeedX);
+    const length = generateRandomNumber(flake.lowestLength, flake.highestLength);
+    const color = flake.colors[generateRandomInteger(flake.colors.length)];
+    const alpha = generateRandomNumber(flake.lowestAlpha, flake.highestAlpha);
+    let speedX = generateRandomNumber(flake.lowestSpeedX, flake.highestSpeedX);
     let x;
     let y;
     if (Math.random() < flake.sideProbability) {
@@ -112,13 +76,13 @@ function createFlakes () {
       x,
       y,
       angle: 0,
-      depth: flake.lowestDepth + Math.random() * (flake.highestDepth - flake.lowestDepth),
+      depth: generateRandomNumber(flake.lowestDepth, flake.highestDepth),
       length,
       color: `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${alpha})`,
-      lineWidth: flake.lowestLineWidth + Math.random() * (flake.highestLineWidth - flake.lowestLineWidth),
-      rotation: flake.lowestRotation + Math.random() * (flake.highestRotation - flake.lowestRotation),
+      lineWidth: generateRandomNumber(flake.lowestLineWidth, flake.highestLineWidth),
+      rotation: generateRandomNumber(flake.lowestRotation, flake.highestRotation),
       speedX,
-      speedY: flake.lowestSpeedY + Math.random() * (flake.highestSpeedY - flake.lowestSpeedY)
+      speedY: generateRandomNumber(flake.lowestSpeedY, flake.highestSpeedY)
     });
   }
 }
@@ -135,20 +99,4 @@ function removeFlakes (frames) {
       f.angle += f.rotation * frames;
     }
   }
-}
-
-function keyUpHandler (e) {
-  if (e.keyCode === 80) {
-    if (animation === undefined) {
-      animation = window.requestAnimationFrame(draw);
-    } else {
-      window.cancelAnimationFrame(animation);
-      animation = undefined;
-    }
-  }
-}
-
-function resizeHandler () {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
 }
